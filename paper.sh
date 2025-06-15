@@ -1,2 +1,2 @@
 #!/bin/bash
-cd server && java -Xms8192M -Xmx8192M -jar server.jar
+cd server && java -Xmx1G -Xms1G -jar server/server.jar nogui
