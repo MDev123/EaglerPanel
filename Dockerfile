@@ -1,21 +1,22 @@
 FROM openjdk:17-jdk-slim
 
-WORKDIR /
+# Install curl, bash, and SDKMAN for Java management
+RUN apt-get update && apt-get install -y curl bash unzip
 
-# Install basic tools
-RUN apt-get update && apt-get install -y curl bash
+# Install sdkman dependencies
+RUN apt-get install -y zip
 
-# Copy all repo files
+# Copy all files to /
 COPY . .
 
-# Make scripts executable
-RUN chmod +x paper.sh waterfall.sh install.sh
+# Make your scripts executable
+RUN chmod +x install.sh paper.sh waterfall.sh
 
-# Install anything needed from install.sh
-RUN ./install.sh || true
+# Run install.sh to set up environment & install Java 17 (via sdkman)
+RUN ./install.sh
 
-# Expose the Minecraft and proxy ports
+# Expose Minecraft (25565) and proxy (25566) ports
 EXPOSE 25565 25566
 
-# Start both the server and proxy
+# Run both paper and waterfall servers together
 CMD ./paper.sh & ./waterfall.sh & wait
